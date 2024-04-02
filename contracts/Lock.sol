@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.4;
 
 import "@redstone-finance/evm-connector/contracts/data-services/RapidDemoConsumerBase.sol";
 
