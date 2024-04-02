@@ -7,6 +7,7 @@ import { expect } from "chai";
 import hre from "hardhat";
 import { WrapperBuilder } from "@redstone-finance/evm-connector";
 import { SimpleNumericMockWrapper } from "@redstone-finance/evm-connector/dist/src/wrappers/SimpleMockNumericWrapper";
+import { Contract, ContractFactory } from "ethers";
 
 //import { Contract } from "ethers";
 
@@ -20,7 +21,8 @@ describe("Lock", function () {
     const ONE_GWEI = 1_000_000_000;
 
     const lockedAmount = ONE_GWEI;
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
+    //const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
+    const unlockTime = 1893456000;
 
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await hre.ethers.getSigners();
@@ -102,88 +104,217 @@ describe("Lock", function () {
     });
 
     describe("Redstone", function () {
+
+      /* let contract: Lock;
+
+      beforeEach(async () => {
+        // Deploy contract
+        const LockContract = await hre.ethers.getContractFactory("Lock");
+        contract = await LockContract.deploy(1893456000);
+      }); */
+
       it("Get ETH price securely", async function () {
         //const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
-        const address = "0x0a5A1C81F278cAe80d340a4A97E2D7B1c3Ec511a";
+        /* const address = "0x08e81Fc05C9c9DEEAA0c9FA49E9475669fCC48Dd";
         const abi = [
           {
-              "inputs": [],
-              "stateMutability": "nonpayable",
+              "inputs": [
+                  {
+                      "internalType": "uint256",
+                      "name": "_unlockTime",
+                      "type": "uint256"
+                  }
+              ],
+              "stateMutability": "payable",
               "type": "constructor"
+          },
+          {
+              "inputs": [],
+              "name": "CalldataMustHaveValidPayload",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "CalldataOverOrUnderFlow",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "CanNotPickMedianOfEmptyArray",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "DataPackageTimestampMustNotBeZero",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "DataPackageTimestampsMustBeEqual",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "EachSignerMustProvideTheSameValue",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "EmptyCalldataPointersArr",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "GetDataServiceIdNotImplemented",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "IncorrectUnsignedMetadataSize",
+              "type": "error"
+          },
+          {
+              "inputs": [
+                  {
+                      "internalType": "uint256",
+                      "name": "receivedSignersCount",
+                      "type": "uint256"
+                  },
+                  {
+                      "internalType": "uint256",
+                      "name": "requiredSignersCount",
+                      "type": "uint256"
+                  }
+              ],
+              "name": "InsufficientNumberOfUniqueSigners",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "InvalidCalldataPointer",
+              "type": "error"
+          },
+          {
+              "inputs": [],
+              "name": "RedstonePayloadMustHaveAtLeastOneDataPackage",
+              "type": "error"
+          },
+          {
+              "inputs": [
+                  {
+                      "internalType": "address",
+                      "name": "receivedSigner",
+                      "type": "address"
+                  }
+              ],
+              "name": "SignerNotAuthorised",
+              "type": "error"
+          },
+          {
+              "inputs": [
+                  {
+                      "internalType": "uint256",
+                      "name": "receivedTimestampSeconds",
+                      "type": "uint256"
+                  },
+                  {
+                      "internalType": "uint256",
+                      "name": "blockTimestamp",
+                      "type": "uint256"
+                  }
+              ],
+              "name": "TimestampFromTooLongFuture",
+              "type": "error"
+          },
+          {
+              "inputs": [
+                  {
+                      "internalType": "uint256",
+                      "name": "receivedTimestampSeconds",
+                      "type": "uint256"
+                  },
+                  {
+                      "internalType": "uint256",
+                      "name": "blockTimestamp",
+                      "type": "uint256"
+                  }
+              ],
+              "name": "TimestampIsTooOld",
+              "type": "error"
           },
           {
               "anonymous": false,
               "inputs": [
                   {
-                      "indexed": true,
-                      "internalType": "address",
-                      "name": "sender",
-                      "type": "address"
+                      "indexed": false,
+                      "internalType": "uint256",
+                      "name": "amount",
+                      "type": "uint256"
                   },
                   {
                       "indexed": false,
-                      "internalType": "string",
-                      "name": "message",
-                      "type": "string"
+                      "internalType": "uint256",
+                      "name": "when",
+                      "type": "uint256"
                   }
               ],
-              "name": "NewHello",
+              "name": "Withdrawal",
               "type": "event"
           },
           {
               "inputs": [
+                  {
+                      "internalType": "uint256[]",
+                      "name": "values",
+                      "type": "uint256[]"
+                  }
+              ],
+              "name": "aggregateValues",
+              "outputs": [
                   {
                       "internalType": "uint256",
                       "name": "",
                       "type": "uint256"
                   }
               ],
-              "name": "blacklist",
-              "outputs": [
-                  {
-                      "internalType": "string",
-                      "name": "",
-                      "type": "string"
-                  }
-              ],
               "stateMutability": "view",
               "type": "function"
           },
           {
               "inputs": [],
-              "name": "counter",
+              "name": "extractTimestampsAndAssertAllAreEqual",
               "outputs": [
                   {
-                      "internalType": "uint32",
-                      "name": "",
-                      "type": "uint32"
+                      "internalType": "uint256",
+                      "name": "extractedTimestamp",
+                      "type": "uint256"
                   }
               ],
-              "stateMutability": "view",
-              "type": "function"
-          },
-          {
-              "inputs": [
-                  {
-                      "internalType": "string",
-                      "name": "_message",
-                      "type": "string"
-                  }
-              ],
-              "name": "createHello",
-              "outputs": [],
-              "stateMutability": "nonpayable",
+              "stateMutability": "pure",
               "type": "function"
           },
           {
               "inputs": [
                   {
                       "internalType": "address",
-                      "name": "_address",
+                      "name": "signerAddress",
                       "type": "address"
                   }
               ],
-              "name": "getHello",
+              "name": "getAuthorisedSignerIndex",
+              "outputs": [
+                  {
+                      "internalType": "uint8",
+                      "name": "",
+                      "type": "uint8"
+                  }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+          },
+          {
+              "inputs": [],
+              "name": "getDataServiceId",
               "outputs": [
                   {
                       "internalType": "string",
@@ -196,12 +327,12 @@ describe("Lock", function () {
           },
           {
               "inputs": [],
-              "name": "getHelloCounter",
+              "name": "getLatestEthPrice",
               "outputs": [
                   {
-                      "internalType": "uint32",
+                      "internalType": "uint256",
                       "name": "",
-                      "type": "uint32"
+                      "type": "uint256"
                   }
               ],
               "stateMutability": "view",
@@ -209,44 +340,12 @@ describe("Lock", function () {
           },
           {
               "inputs": [],
-              "name": "maxLength",
+              "name": "getUniqueSignersThreshold",
               "outputs": [
                   {
-                      "internalType": "uint32",
+                      "internalType": "uint8",
                       "name": "",
-                      "type": "uint32"
-                  }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-          },
-          {
-              "inputs": [
-                  {
-                      "internalType": "address",
-                      "name": "",
-                      "type": "address"
-                  }
-              ],
-              "name": "message",
-              "outputs": [
-                  {
-                      "internalType": "string",
-                      "name": "",
-                      "type": "string"
-                  }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-          },
-          {
-              "inputs": [],
-              "name": "minLength",
-              "outputs": [
-                  {
-                      "internalType": "uint32",
-                      "name": "",
-                      "type": "uint32"
+                      "type": "uint8"
                   }
               ],
               "stateMutability": "view",
@@ -257,7 +356,7 @@ describe("Lock", function () {
               "name": "owner",
               "outputs": [
                   {
-                      "internalType": "address",
+                      "internalType": "address payable",
                       "name": "",
                       "type": "address"
                   }
@@ -266,42 +365,44 @@ describe("Lock", function () {
               "type": "function"
           },
           {
-              "inputs": [
+              "inputs": [],
+              "name": "unlockTime",
+              "outputs": [
                   {
-                      "internalType": "string[]",
-                      "name": "_newWord",
-                      "type": "string[]"
+                      "internalType": "uint256",
+                      "name": "",
+                      "type": "uint256"
                   }
               ],
-              "name": "setBlacklist",
-              "outputs": [],
-              "stateMutability": "nonpayable",
+              "stateMutability": "view",
               "type": "function"
           },
           {
               "inputs": [
                   {
-                      "internalType": "uint32",
-                      "name": "_newMin",
-                      "type": "uint32"
-                  },
-                  {
-                      "internalType": "uint32",
-                      "name": "_newMax",
-                      "type": "uint32"
+                      "internalType": "uint256",
+                      "name": "receivedTimestampMilliseconds",
+                      "type": "uint256"
                   }
               ],
-              "name": "setMinMaxMessageLength",
+              "name": "validateTimestamp",
+              "outputs": [],
+              "stateMutability": "view",
+              "type": "function"
+          },
+          {
+              "inputs": [],
+              "name": "withdraw",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
           }
-        ];
+      ];
         const url = 'https://rpc.sepolia-api.lisk.com';
         const provider = new hre.ethers.JsonRpcProvider(url);
-        const yourEthersContract = new hre.ethers.Contract(address, abi, provider);
+        const yourEthersContract = new hre.ethers.Contract(address, abi, provider); */
         // Wrapping the contract
-        const wrappedContract =
+        /* const wrappedContract =
           WrapperBuilder.wrap(yourEthersContract).usingSimpleNumericMock(
             {
               mockSignersCount: 10,
@@ -309,10 +410,12 @@ describe("Lock", function () {
                 {dataFeedId: "ETH", value: 1000}
               ],
             },
-          );
-        /* const wrappedContract = WrapperBuilder.wrap(lock).usingDataService({
+          ); */
+        const LockContract = await hre.ethers.getContractFactory("Lock");
+        const contract = await LockContract.deploy(1896456000);
+        const wrappedContract = WrapperBuilder.wrap(contract).usingDataService({
           dataFeeds: ["ETH"],
-        }); */
+        });
 
         // Interact with the contract (getting oracle value securely)
         const ethPriceFromContract = await wrappedContract.getLatestEthPrice();
